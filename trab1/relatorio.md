@@ -1,4 +1,4 @@
-# k
+# Problema dos Missionários e Canibais
 
 Autor: Gabriel Stiegemeier
 Disciplina: Inteligência Artificial
@@ -52,3 +52,19 @@ Para validar a eficiência e o comportamento do agente desenvolvido, a estratég
 * **Complexidade de Tempo (Tamanho do Problema vs. Nós Acessados e Tempo de Execução):** O dado empírico mais revelador do experimento está no crescimento de nós gerados e expandidos. Embora a combinatória máxima teórica do problema sugira um espaço de estados polinomial de limite $\mathcal{O}(N^2)$, o gráfico de nós acessados revela uma taxa de crescimento estritamente linear, $\mathcal{O}(N)$. Isso ocorre porque o método de validação de estados (filtro de regras) atua podando maciçamente a árvore de possibilidades. Para que a restrição de sobrevivência seja obedecida em ambas as margens, a população deve transitar majoritariamente em configurações onde o número de missionários é igual ao de canibais ($M=C$), reduzindo o espaço explorável a um "corredor" linear estreito. Como o uso de um conjunto explorado garante que cada nó válido seja visitado no máximo uma vez, a complexidade de tempo prática se mantém linear. O gráfico de tempo de execução acompanha essa tendência (resolvendo $N=100$ em $\approx 0,0025$ segundos), apresentando apenas flutuações.
 
 * **Complexidade de Espaço (Tamanho do Problema vs. Espaço/Memória):** O limite fatal da Busca em Largura clássica é o consumo de memória. No entanto, devido ao severo estrangulamento das ramificações válidas provocado pela "física" do problema (que restringe os estados acessíveis à proporção $\mathcal{O}(N)$), o armazenamento de nós na borda (fila) e no histórico de visitas (*closed list*) cresce apenas de forma linear. Um detalhe de implementação de hardware/software é capturado perfeitamente pelo gráfico de pico de memória: o salto abrupto observado na curva (como o ocorrido entre $N=36$ e $N=37$) reflete o comportamento interno da estrutura de Tabela Hash (`set` em Python) utilizada para o conjunto explorado. Para garantir inserções e buscas em tempo constante $\mathcal{O}(1)$, o interpretador Python realoca a tabela inteira e dobra o seu tamanho em blocos de memória contígua sempre que um determinado fator de carga (*load factor*) é atingido, justificando os platôs e os saltos degraus (*steps*) na memória consumida.
+
+***
+
+## 5. Impacto do Aumento da Capacidade da Embarcação ($c=4$)
+
+A alteração da restrição de capacidade do barco para $c=4$ elimina o gargalo de solucionabilidade do problema original, permitindo que o algoritmo encontre o **estado objetivo** para qualquer valor de $N$. Fisicamente, um barco maior garante a "vazão" necessária para que uma tripulação mista (ex: 1 missionário e 1 canibal) transporte os demais de forma gradativa, sem violar as restrições numéricas nas margens.
+
+Na medição de desempenho, o barco maior aumenta o **fator de ramificação** ($b$) da árvore de busca — pois gera muito mais combinações de ações válidas —, mas reduz substancialmente a **profundidade** ($d$) do caminho da solução. Os testes empíricos confirmaram que as complexidades de tempo e espaço mantêm o crescimento linear de $\mathcal{O}(N)$, pois o filtro de sobrevivência nas margens continua podando severamente o **espaço de estados**, confinando a busca aos estados seguros.
+
+Para adaptar a formulação do problema à nova "física" do ambiente, o código exigiu três atualizações estruturais:
+
+* **Capacidade Dinâmica:** A constante restritiva foi substituída pela variável paramétrica `tam_barco`.
+* **Geração de Ações:** O conjunto estático de viagens foi substituído por uma rotina matemática que calcula dinamicamente todas as combinações possíveis de passageiros com base na capacidade.
+* **Filtro Interno:** Adicionou-se uma nova restrição matemática para garantir que os missionários não fiquem em menor número dentro da própria embarcação durante a travessia, podando precocemente esses estados inválidos.
+
+![alt text](image.png)

@@ -1,0 +1,52 @@
+============================================================
+=== 1. MINIMAX COMPLETO === ÁRVORE ORIGINAL ===
+Valor na raiz: 6
+Caminho ótimo: A -> H -> J -> J2
+Nós explorados: 22
+Decisão de A: filho H
+============================================================
+=== 2. ALPHA-BETA === ÁRVORE ORIGINAL ===
+Valor na raiz: 6
+Caminho ótimo: A -> H -> J -> J2
+Nós explorados: 18
+Podas: 2
+  - No nó E, filhos ['E2'] podados (motivo: valor 6 >= beta 5)
+  - No nó C, filhos ['G'] podados (motivo: valor 2 <= alpha 5)
+Decisão de A: filho H
+============================================================
+=== 3. MINIMAX DEPTH-LIMITED (L=2) === ÁRVORE ORIGINAL ===
+Valor na raiz: 4
+Caminho ótimo: A -> B -> D
+Nós explorados: 10
+Decisão de A: filho B
+============================================================
+=== 1. MINIMAX COMPLETO === ÁRVORE MODIFICADA ===
+Valor na raiz: 8
+Caminho ótimo: A -> B -> D -> D2
+Nós explorados: 22
+Decisão de A: filho B
+============================================================
+=== 2. ALPHA-BETA === ÁRVORE MODIFICADA ===
+Valor na raiz: 8
+Caminho ótimo: A -> B -> D -> D2
+Nós explorados: 16
+Podas: 2
+  - No nó C, filhos ['G'] podados (motivo: valor 2 <= alpha 8)
+  - No nó H, filhos ['J'] podados (motivo: valor 4 <= alpha 8)
+Decisão de A: filho B
+============================================================
+=== 3. MINIMAX DEPTH-LIMITED (L=2) === ÁRVORE MODIFICADA ===
+Valor na raiz: 4
+Caminho ótimo: A -> B -> D
+Nós explorados: 10
+Decisão de A: filho B
+============================================================
+
+| Algoritmo            | Árvore            | Valor raiz | Nós explorados | Podas | Decisão A |
+|----------------------|-------------------|------------|----------------|-------|-----------|
+| Minimax Comp.        | ÁRVORE ORIGINAL   | 6          | 22             | -     | H         |
+| Alpha-Beta           | ÁRVORE ORIGINAL   | 6          | 18             | 2     | H         |
+| Depth-Lim(2)         | ÁRVORE ORIGINAL   | 4          | 10             | -     | B         |
+| Minimax Comp.        | ÁRVORE MODIFICADA | 8          | 22             | -     | B         |
+| Alpha-Beta           | ÁRVORE MODIFICADA | 8          | 16             | 2     | B         |
+| Depth-Lim(2)         | ÁRVORE MODIFICADA | 4          | 10             | -     | B         |

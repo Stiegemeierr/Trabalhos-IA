@@ -1,0 +1,286 @@
+=================================================================
+EXECUÇÃO: GRAFO ORIGINAL
+=================================================================
+
+=============================================
+1. BUSCA EM AMPLITUDE/LARGURA (BFS)
+=============================================
+| Passo | Nó expandido |     Conteúdo da fronteira      |
+---------------------------------------------------------
+|   1   |      A       | [B, C, D]                      |
+|   2   |      B       | [C, D, E, F]                   |
+|   3   |      C       | [D, E, F, G, H]                |
+|   4   |      D       | [E, F, G, H, I]                |
+|   5   |      E       | [F, G, H, I, J]                |
+|   6   |      F       | [G, H, I, J, K, L]             |
+|   7   |      G       | [H, I, J, K, L, M]             |
+|   8   |      H       | [I, J, K, L, M, N, O]          |
+|   9   |      I       | [J, K, L, M, N, O, P]          |
+|  10   |      J       | [K, L, M, N, O, P]             |
+|  11   |      K       | [L, M, N, O, P, Q]             |
+|  12   |      L       | [M, N, O, P, Q]                |
+|  13   |      M       | [N, O, P, Q, R]                |
+|  14   |      N       | [O, P, Q, R]                   |
+|  15   |      O       | [P, Q, R, S]                   |
+|  16   |      P       | [Q, R, S]                      |
+|  17   |      Q       | [R, S]                         |
+|  18   |      R       | [S]                            |
+|  19   |      S       | []                             |
+
+Resultados da Busca:
+a) Ordem completa de expansão: A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O -> P -> Q -> R -> S
+b) Conteúdo da fronteira: (Visto na tabela acima passo a passo)
+c) Árvore parcial de busca: [A->B, A->C, A->D, B->E, B->F, C->G, C->H, D->I, E->J, F->K, F->L, G->M, H->N, H->O, I->P, K->Q, M->R, O->S]
+d) Caminho solução encontrado: A -> C -> H -> O -> S
+e) Profundidade da solução: 4
+f) Custo da solução: 4
+g) Quantidade de nós gerados: 19
+h) Quantidade de nós expandidos: 18
+
+=============================================
+2. BUSCA EM PROFUNDIDADE (DFS)
+=============================================
+| Passo | Nó expandido |     Conteúdo da fronteira      |
+---------------------------------------------------------
+|   1   |      A       | [B, C, D]                      |
+|   2   |      B       | [E, F, C, D]                   |
+|   3   |      E       | [J, F, C, D]                   |
+|   4   |      J       | [F, C, D]                      |
+|   5   |      F       | [K, L, C, D]                   |
+|   6   |      K       | [Q, L, C, D]                   |
+|   7   |      Q       | [L, C, D]                      |
+|   8   |      L       | [C, D]                         |
+|   9   |      C       | [G, H, D]                      |
+|  10   |      G       | [M, H, D]                      |
+|  11   |      M       | [R, H, D]                      |
+|  12   |      R       | [H, D]                         |
+|  13   |      H       | [N, O, D]                      |
+|  14   |      N       | [O, D]                         |
+|  15   |      O       | [S, D]                         |
+|  16   |      S       | [D]                            |
+
+Resultados da Busca:
+a) Ordem completa de expansão: A -> B -> E -> J -> F -> K -> Q -> L -> C -> G -> M -> R -> H -> N -> O -> S
+b) Conteúdo da fronteira: (Visto na tabela acima passo a passo)
+c) Árvore parcial de busca: [O->S, H->N, H->O, M->R, G->M, C->G, C->H, K->Q, F->K, F->L, E->J, B->E, B->F, A->B, A->C, A->D]
+d) Caminho solução encontrado: A -> C -> H -> O -> S
+e) Profundidade da solução: 4
+f) Custo da solução: 4
+g) Quantidade de nós gerados: 17
+h) Quantidade de nós expandidos: 15
+
+=============================================
+3. BUSCA ITERATIVA EM PROFUNDIDADE (IDS)
+=============================================
+
+--- Iteração com limite de profundidade: 0 ---
+| Passo | Nó expandido |     Conteúdo da fronteira      |
+---------------------------------------------------------
+|   1   |   A (lim)    | []                             |
+
+--- Iteração com limite de profundidade: 1 ---
+| Passo | Nó expandido |     Conteúdo da fronteira      |
+---------------------------------------------------------
+|   1   |      A       | [B, C, D]                      |
+|   2   |   B (lim)    | [C, D]                         |
+|   3   |   C (lim)    | [D]                            |
+|   4   |   D (lim)    | []                             |
+
+--- Iteração com limite de profundidade: 2 ---
+| Passo | Nó expandido |     Conteúdo da fronteira      |
+---------------------------------------------------------
+|   1   |      A       | [B, C, D]                      |
+|   2   |      B       | [E, F, C, D]                   |
+|   3   |   E (lim)    | [F, C, D]                      |
+|   4   |   F (lim)    | [C, D]                         |
+|   5   |      C       | [G, H, D]                      |
+|   6   |   G (lim)    | [H, D]                         |
+|   7   |   H (lim)    | [D]                            |
+|   8   |      D       | [I]                            |
+|   9   |   I (lim)    | []                             |
+
+--- Iteração com limite de profundidade: 3 ---
+| Passo | Nó expandido |     Conteúdo da fronteira      |
+---------------------------------------------------------
+|   1   |      A       | [B, C, D]                      |
+|   2   |      B       | [E, F, C, D]                   |
+|   3   |      E       | [J, F, C, D]                   |
+|   4   |   J (lim)    | [F, C, D]                      |
+|   5   |      F       | [K, L, C, D]                   |
+|   6   |   K (lim)    | [L, C, D]                      |
+|   7   |   L (lim)    | [C, D]                         |
+|   8   |      C       | [G, H, D]                      |
+|   9   |      G       | [M, H, D]                      |
+|  10   |   M (lim)    | [H, D]                         |
+|  11   |      H       | [N, O, D]                      |
+|  12   |   N (lim)    | [O, D]                         |
+|  13   |   O (lim)    | [D]                            |
+|  14   |      D       | [I]                            |
+|  15   |      I       | [P]                            |
+|  16   |   P (lim)    | []                             |
+
+--- Iteração com limite de profundidade: 4 ---
+| Passo | Nó expandido |     Conteúdo da fronteira      |
+---------------------------------------------------------
+|   1   |      A       | [B, C, D]                      |
+|   2   |      B       | [E, F, C, D]                   |
+|   3   |      E       | [J, F, C, D]                   |
+|   4   |      J       | [F, C, D]                      |
+|   5   |      F       | [K, L, C, D]                   |
+|   6   |      K       | [Q, L, C, D]                   |
+|   7   |   Q (lim)    | [L, C, D]                      |
+|   8   |      L       | [C, D]                         |
+|   9   |      C       | [G, H, D]                      |
+|  10   |      G       | [M, H, D]                      |
+|  11   |      M       | [R, H, D]                      |
+|  12   |   R (lim)    | [H, D]                         |
+|  13   |      H       | [N, O, D]                      |
+|  14   |      N       | [O, D]                         |
+|  15   |      O       | [S, D]                         |
+|  16   |      S       | [D]                            |
+
+Resultados da Busca:
+a) Ordem completa de expansão: A -> B -> E -> J -> F -> K -> Q -> L -> C -> G -> M -> R -> H -> N -> O -> S
+b) Conteúdo da fronteira: (Visto na tabela acima passo a passo)
+c) Árvore parcial de busca: [O->S, H->N, H->O, M->R, G->M, C->G, C->H, K->Q, F->K, F->L, E->J, B->E, B->F, A->B, A->C, A->D]
+d) Caminho solução encontrado: A -> C -> H -> O -> S
+e) Profundidade da solução: 4
+f) Custo da solução: 4
+g) Quantidade de nós gerados: 47
+h) Quantidade de nós expandidos: 27
+
+
+=================================================================
+EXECUÇÃO: GRAFO MODIFICADO
+=================================================================
+
+=============================================
+1. BUSCA EM AMPLITUDE/LARGURA (BFS)
+=============================================
+| Passo | Nó expandido |     Conteúdo da fronteira      |
+---------------------------------------------------------
+|   1   |      A       | [D, C, B]                      |
+|   2   |      D       | [C, B, I]                      |
+|   3   |      C       | [B, I, H, G]                   |
+|   4   |      B       | [I, H, G, E, F]                |
+|   5   |      I       | [H, G, E, F, P]                |
+|   6   |      H       | [G, E, F, P, N, O]             |
+|   7   |      G       | [E, F, P, N, O, M]             |
+|   8   |      E       | [F, P, N, O, M, J]             |
+|   9   |      F       | [P, N, O, M, J, K, L]          |
+|  10   |      P       | [N, O, M, J, K, L]             |
+|  11   |      N       | [O, M, J, K, L]                |
+|  12   |      O       | [M, J, K, L, S]                |
+|  13   |      M       | [J, K, L, S, R]                |
+|  14   |      J       | [K, L, S, R]                   |
+|  15   |      K       | [L, S, R, Q]                   |
+|  16   |      L       | [S, R, Q]                      |
+|  17   |      S       | [R, Q]                         |
+
+Resultados da Busca:
+a) Ordem completa de expansão: A -> D -> C -> B -> I -> H -> G -> E -> F -> P -> N -> O -> M -> J -> K -> L -> S
+b) Conteúdo da fronteira: (Visto na tabela acima passo a passo)
+c) Árvore parcial de busca: [A->D, A->C, A->B, D->I, C->H, C->G, B->E, B->F, I->P, H->N, H->O, G->M, E->J, F->K, F->L, O->S, M->R, K->Q]
+d) Caminho solução encontrado: A -> C -> H -> O -> S
+e) Profundidade da solução: 4
+f) Custo da solução: 4
+g) Quantidade de nós gerados: 19
+h) Quantidade de nós expandidos: 16
+
+=============================================
+2. BUSCA EM PROFUNDIDADE (DFS)
+=============================================
+| Passo | Nó expandido |     Conteúdo da fronteira      |
+---------------------------------------------------------
+|   1   |      A       | [D, C, B]                      |
+|   2   |      D       | [I, C, B]                      |
+|   3   |      I       | [P, C, B]                      |
+|   4   |      P       | [C, B]                         |
+|   5   |      C       | [H, G, B]                      |
+|   6   |      H       | [N, O, G, B]                   |
+|   7   |      N       | [O, G, B]                      |
+|   8   |      O       | [S, G, B]                      |
+|   9   |      S       | [G, B]                         |
+
+Resultados da Busca:
+a) Ordem completa de expansão: A -> D -> I -> P -> C -> H -> N -> O -> S
+b) Conteúdo da fronteira: (Visto na tabela acima passo a passo)
+c) Árvore parcial de busca: [O->S, H->N, H->O, C->H, C->G, I->P, D->I, A->D, A->C, A->B]
+d) Caminho solução encontrado: A -> C -> H -> O -> S
+e) Profundidade da solução: 4
+f) Custo da solução: 4
+g) Quantidade de nós gerados: 11
+h) Quantidade de nós expandidos: 8
+
+=============================================
+3. BUSCA ITERATIVA EM PROFUNDIDADE (IDS)
+=============================================
+
+--- Iteração com limite de profundidade: 0 ---
+| Passo | Nó expandido |     Conteúdo da fronteira      |
+---------------------------------------------------------
+|   1   |   A (lim)    | []                             |
+
+--- Iteração com limite de profundidade: 1 ---
+| Passo | Nó expandido |     Conteúdo da fronteira      |
+---------------------------------------------------------
+|   1   |      A       | [D, C, B]                      |
+|   2   |   D (lim)    | [C, B]                         |
+|   3   |   C (lim)    | [B]                            |
+|   4   |   B (lim)    | []                             |
+
+--- Iteração com limite de profundidade: 2 ---
+| Passo | Nó expandido |     Conteúdo da fronteira      |
+---------------------------------------------------------
+|   1   |      A       | [D, C, B]                      |
+|   2   |      D       | [I, C, B]                      |
+|   3   |   I (lim)    | [C, B]                         |
+|   4   |      C       | [H, G, B]                      |
+|   5   |   H (lim)    | [G, B]                         |
+|   6   |   G (lim)    | [B]                            |
+|   7   |      B       | [E, F]                         |
+|   8   |   E (lim)    | [F]                            |
+|   9   |   F (lim)    | []                             |
+
+--- Iteração com limite de profundidade: 3 ---
+| Passo | Nó expandido |     Conteúdo da fronteira      |
+---------------------------------------------------------
+|   1   |      A       | [D, C, B]                      |
+|   2   |      D       | [I, C, B]                      |
+|   3   |      I       | [P, C, B]                      |
+|   4   |   P (lim)    | [C, B]                         |
+|   5   |      C       | [H, G, B]                      |
+|   6   |      H       | [N, O, G, B]                   |
+|   7   |   N (lim)    | [O, G, B]                      |
+|   8   |   O (lim)    | [G, B]                         |
+|   9   |      G       | [M, B]                         |
+|  10   |   M (lim)    | [B]                            |
+|  11   |      B       | [E, F]                         |
+|  12   |      E       | [J, F]                         |
+|  13   |   J (lim)    | [F]                            |
+|  14   |      F       | [K, L]                         |
+|  15   |   K (lim)    | [L]                            |
+|  16   |   L (lim)    | []                             |
+
+--- Iteração com limite de profundidade: 4 ---
+| Passo | Nó expandido |     Conteúdo da fronteira      |
+---------------------------------------------------------
+|   1   |      A       | [D, C, B]                      |
+|   2   |      D       | [I, C, B]                      |
+|   3   |      I       | [P, C, B]                      |
+|   4   |      P       | [C, B]                         |
+|   5   |      C       | [H, G, B]                      |
+|   6   |      H       | [N, O, G, B]                   |
+|   7   |      N       | [O, G, B]                      |
+|   8   |      O       | [S, G, B]                      |
+|   9   |      S       | [G, B]                         |
+
+Resultados da Busca:
+a) Ordem completa de expansão: A -> D -> I -> P -> C -> H -> N -> O -> S
+b) Conteúdo da fronteira: (Visto na tabela acima passo a passo)
+c) Árvore parcial de busca: [O->S, H->N, H->O, C->H, C->G, I->P, D->I, A->D, A->C, A->B]
+d) Caminho solução encontrado: A -> C -> H -> O -> S
+e) Profundidade da solução: 4
+f) Custo da solução: 4
+g) Quantidade de nós gerados: 41
+h) Quantidade de nós expandidos: 22

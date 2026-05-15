@@ -30,12 +30,293 @@ Custo unitário (valor 1) para cada ação de deslocamento entre salas.
 
 #### 1.2.1 Grafo Original
 
-<!-- Tabelas e resultados do código - grafo original -->
+#### 1. BUSCA EM AMPLITUDE/LARGURA (BFS)
+
+| Passo | Nó expandido | Conteúdo da fronteira |
+| --- | --- | --- |
+| 1 | A | [B, C, D] |
+| 2 | B | [C, D, E, F] |
+| 3 | C | [D, E, F, G, H] |
+| 4 | D | [E, F, G, H, I] |
+| 5 | E | [F, G, H, I, J] |
+| 6 | F | [G, H, I, J, K, L] |
+| 7 | G | [H, I, J, K, L, M] |
+| 8 | H | [I, J, K, L, M, N, O] |
+| 9 | I | [J, K, L, M, N, O, P] |
+| 10 | J | [K, L, M, N, O, P] |
+| 11 | K | [L, M, N, O, P, Q] |
+| 12 | L | [M, N, O, P, Q] |
+| 13 | M | [N, O, P, Q, R] |
+| 14 | N | [O, P, Q, R] |
+| 15 | O | [P, Q, R, S] |
+| 16 | P | [Q, R, S] |
+| 17 | Q | [R, S] |
+| 18 | R | [S] |
+| 19 | S | [] |
+
+Resultados da Busca:
+
+* **a) Ordem completa de expansão:** A -> B -> C -> D -> E -> F -> G -> H -> I -> J -> K -> L -> M -> N -> O -> P -> Q -> R -> S
+* **b) Conteúdo da fronteira:** (Visto na tabela acima passo a passo)
+* **c) Árvore parcial de busca:** [A->B, A->C, A->D, B->E, B->F, C->G, C->H, D->I, E->J, F->K, F->L, G->M, H->N, H->O, I->P, K->Q, M->R, O->S]
+* **d) Caminho solução encontrado:** A -> C -> H -> O -> S
+* **e) Profundidade da solução:** 4
+* **f) Custo da solução:** 4
+* **g) Quantidade de nós gerados:** 19
+* **h) Quantidade de nós expandidos:** 18
+
+#### 2. BUSCA EM PROFUNDIDADE (DFS)
+
+| Passo | Nó expandido | Conteúdo da fronteira |
+| --- | --- | --- |
+| 1 | A | [B, C, D] |
+| 2 | B | [E, F, C, D] |
+| 3 | E | [J, F, C, D] |
+| 4 | J | [F, C, D] |
+| 5 | F | [K, L, C, D] |
+| 6 | K | [Q, L, C, D] |
+| 7 | Q | [L, C, D] |
+| 8 | L | [C, D] |
+| 9 | C | [G, H, D] |
+| 10 | G | [M, H, D] |
+| 11 | M | [R, H, D] |
+| 12 | R | [H, D] |
+| 13 | H | [N, O, D] |
+| 14 | N | [O, D] |
+| 15 | O | [S, D] |
+| 16 | S | [D] |
+
+Resultados da Busca:
+
+* **a) Ordem completa de expansão:** A -> B -> E -> J -> F -> K -> Q -> L -> C -> G -> M -> R -> H -> N -> O -> S
+* **b) Conteúdo da fronteira:** (Visto na tabela acima passo a passo)
+* **c) Árvore parcial de busca:** [O->S, H->N, H->O, M->R, G->M, C->G, C->H, K->Q, F->K, F->L, E->J, B->E, B->F, A->B, A->C, A->D]
+* **d) Caminho solução encontrado:** A -> C -> H -> O -> S
+* **e) Profundidade da solução:** 4
+* **f) Custo da solução:** 4
+* **g) Quantidade de nós gerados:** 17
+* **h) Quantidade de nós expandidos:** 15
+
+#### 3. BUSCA ITERATIVA EM PROFUNDIDADE (IDS)
+
+#### Iteração com limite de profundidade: 0
+
+| Passo | Nó expandido | Conteúdo da fronteira |
+| --- | --- | --- |
+| 1 | A (lim) | [] |
+
+#### Iteração com limite de profundidade: 1
+
+| Passo | Nó expandido | Conteúdo da fronteira |
+| --- | --- | --- |
+| 1 | A | [B, C, D] |
+| 2 | B (lim) | [C, D] |
+| 3 | C (lim) | [D] |
+| 4 | D (lim) | [] |
+
+#### Iteração com limite de profundidade: 2
+
+| Passo | Nó expandido | Conteúdo da fronteira |
+| --- | --- | --- |
+| 1 | A | [B, C, D] |
+| 2 | B | [E, F, C, D] |
+| 3 | E (lim) | [F, C, D] |
+| 4 | F (lim) | [C, D] |
+| 5 | C | [G, H, D] |
+| 6 | G (lim) | [H, D] |
+| 7 | H (lim) | [D] |
+| 8 | D | [I] |
+| 9 | I (lim) | [] |
+
+#### Iteração com limite de profundidade: 3
+
+| Passo | Nó expandido | Conteúdo da fronteira |
+| --- | --- | --- |
+| 1 | A | [B, C, D] |
+| 2 | B | [E, F, C, D] |
+| 3 | E | [J, F, C, D] |
+| 4 | J (lim) | [F, C, D] |
+| 5 | F | [K, L, C, D] |
+| 6 | K (lim) | [L, C, D] |
+| 7 | L (lim) | [C, D] |
+| 8 | C | [G, H, D] |
+| 9 | G | [M, H, D] |
+| 10 | M (lim) | [H, D] |
+| 11 | H | [N, O, D] |
+| 12 | N (lim) | [O, D] |
+| 13 | O (lim) | [D] |
+| 14 | D | [I] |
+| 15 | I | [P] |
+| 16 | P (lim) | [] |
+
+#### Iteração com limite de profundidade: 4
+
+| Passo | Nó expandido | Conteúdo da fronteira |
+| --- | --- | --- |
+| 1 | A | [B, C, D] |
+| 2 | B | [E, F, C, D] |
+| 3 | E | [J, F, C, D] |
+| 4 | J | [F, C, D] |
+| 5 | F | [K, L, C, D] |
+| 6 | K | [Q, L, C, D] |
+| 7 | Q (lim) | [L, C, D] |
+| 8 | L | [C, D] |
+| 9 | C | [G, H, D] |
+| 10 | G | [M, H, D] |
+| 11 | M | [R, H, D] |
+| 12 | R (lim) | [H, D] |
+| 13 | H | [N, O, D] |
+| 14 | N | [O, D] |
+| 15 | O | [S, D] |
+| 16 | S | [D] |
+
+Resultados da Busca:
+
+* **a) Ordem completa de expansão:** A -> B -> E -> J -> F -> K -> Q -> L -> C -> G -> M -> R -> H -> N -> O -> S
+* **b) Conteúdo da fronteira:** (Visto na tabela acima passo a passo)
+* **c) Árvore parcial de busca:** [O->S, H->N, H->O, M->R, G->M, C->G, C->H, K->Q, F->K, F->L, E->J, B->E, B->F, A->B, A->C, A->D]
+* **d) Caminho solução encontrado:** A -> C -> H -> O -> S
+* **e) Profundidade da solução:** 4
+* **f) Custo da solução:** 4
+* **g) Quantidade de nós gerados:** 47
+* **h) Quantidade de nós expandidos:** 27
 
 #### 1.2.2 Grafo Modificado
 
-<!-- Tabelas e resultados do código - grafo modificado -->
-<!-- Incluir nota sobre quais dois nós foram alterados e por quê -->
+#### 1. BUSCA EM AMPLITUDE/LARGURA (BFS)
+
+| Passo | Nó expandido | Conteúdo da fronteira |
+| --- | --- | --- |
+| 1 | A | [D, C, B] |
+| 2 | D | [C, B, I] |
+| 3 | C | [B, I, H, G] |
+| 4 | B | [I, H, G, E, F] |
+| 5 | I | [H, G, E, F, P] |
+| 6 | H | [G, E, F, P, N, O] |
+| 7 | G | [E, F, P, N, O, M] |
+| 8 | E | [F, P, N, O, M, J] |
+| 9 | F | [P, N, O, M, J, K, L] |
+| 10 | P | [N, O, M, J, K, L] |
+| 11 | N | [O, M, J, K, L] |
+| 12 | O | [M, J, K, L, S] |
+| 13 | M | [J, K, L, S, R] |
+| 14 | J | [K, L, S, R] |
+| 15 | K | [L, S, R, Q] |
+| 16 | L | [S, R, Q] |
+| 17 | S | [R, Q] |
+
+Resultados da Busca:
+
+* **a) Ordem completa de expansão:** A -> D -> C -> B -> I -> H -> G -> E -> F -> P -> N -> O -> M -> J -> K -> L -> S
+* **b) Conteúdo da fronteira:** (Visto na tabela acima passo a passo)
+* **c) Árvore parcial de busca:** [A->D, A->C, A->B, D->I, C->H, C->G, B->E, B->F, I->P, H->N, H->O, G->M, E->J, F->K, F->L, O->S, M->R, K->Q]
+* **d) Caminho solução encontrado:** A -> C -> H -> O -> S
+* **e) Profundidade da solução:** 4
+* **f) Custo da solução:** 4
+* **g) Quantidade de nós gerados:** 19
+* **h) Quantidade de nós expandidos:** 16
+
+#### 2. BUSCA EM PROFUNDIDADE (DFS)
+
+| Passo | Nó expandido | Conteúdo da fronteira |
+| --- | --- | --- |
+| 1 | A | [D, C, B] |
+| 2 | D | [I, C, B] |
+| 3 | I | [P, C, B] |
+| 4 | P | [C, B] |
+| 5 | C | [H, G, B] |
+| 6 | H | [N, O, G, B] |
+| 7 | N | [O, G, B] |
+| 8 | O | [S, G, B] |
+| 9 | S | [G, B] |
+
+Resultados da Busca:
+
+* **a) Ordem completa de expansão:** A -> D -> I -> P -> C -> H -> N -> O -> S
+* **b) Conteúdo da fronteira:** (Visto na tabela acima passo a passo)
+* **c) Árvore parcial de busca:** [O->S, H->N, H->O, C->H, C->G, I->P, D->I, A->D, A->C, A->B]
+* **d) Caminho solução encontrado:** A -> C -> H -> O -> S
+* **e) Profundidade da solução:** 4
+* **f) Custo da solução:** 4
+* **g) Quantidade de nós gerados:** 11
+* **h) Quantidade de nós expandidos:** 8
+
+#### 3. BUSCA ITERATIVA EM PROFUNDIDADE (IDS)
+
+#### Iteração com limite de profundidade: 0
+
+| Passo | Nó expandido | Conteúdo da fronteira |
+| --- | --- | --- |
+| 1 | A (lim) | [] |
+
+#### Iteração com limite de profundidade: 1
+
+| Passo | Nó expandido | Conteúdo da fronteira |
+| --- | --- | --- |
+| 1 | A | [D, C, B] |
+| 2 | D (lim) | [C, B] |
+| 3 | C (lim) | [B] |
+| 4 | B (lim) | [] |
+
+#### Iteração com limite de profundidade: 2
+
+| Passo | Nó expandido | Conteúdo da fronteira |
+| --- | --- | --- |
+| 1 | A | [D, C, B] |
+| 2 | D | [I, C, B] |
+| 3 | I (lim) | [C, B] |
+| 4 | C | [H, G, B] |
+| 5 | H (lim) | [G, B] |
+| 6 | G (lim) | [B] |
+| 7 | B | [E, F] |
+| 8 | E (lim) | [F] |
+| 9 | F (lim) | [] |
+
+#### Iteração com limite de profundidade: 3
+
+| Passo | Nó expandido | Conteúdo da fronteira |
+| --- | --- | --- |
+| 1 | A | [D, C, B] |
+| 2 | D | [I, C, B] |
+| 3 | I | [P, C, B] |
+| 4 | P (lim) | [C, B] |
+| 5 | C | [H, G, B] |
+| 6 | H | [N, O, G, B] |
+| 7 | N (lim) | [O, G, B] |
+| 8 | O (lim) | [G, B] |
+| 9 | G | [M, B] |
+| 10 | M (lim) | [B] |
+| 11 | B | [E, F] |
+| 12 | E | [J, F] |
+| 13 | J (lim) | [F] |
+| 14 | F | [K, L] |
+| 15 | K (lim) | [L] |
+| 16 | L (lim) | [] |
+
+#### Iteração com limite de profundidade: 4
+
+| Passo | Nó expandido | Conteúdo da fronteira |
+| --- | --- | --- |
+| 1 | A | [D, C, B] |
+| 2 | D | [I, C, B] |
+| 3 | I | [P, C, B] |
+| 4 | P | [C, B] |
+| 5 | C | [H, G, B] |
+| 6 | H | [N, O, G, B] |
+| 7 | N | [O, G, B] |
+| 8 | O | [S, G, B] |
+| 9 | S | [G, B] |
+
+Resultados da Busca:
+
+* **a) Ordem completa de expansão:** A -> D -> I -> P -> C -> H -> N -> O -> S
+* **b) Conteúdo da fronteira:** (Visto na tabela acima passo a passo)
+* **c) Árvore parcial de busca:** [O->S, H->N, H->O, C->H, C->G, I->P, D->I, A->D, A->C, A->B]
+* **d) Caminho solução encontrado:** A -> C -> H -> O -> S
+* **e) Profundidade da solução:** 4
+* **f) Custo da solução:** 4
+* **g) Quantidade de nós gerados:** 41
+* **h) Quantidade de nós expandidos:** 22
 
 ---
 
@@ -114,12 +395,84 @@ Estimativa do custo (ou distância) da posição atual até a posição objetivo
 
 #### 2.2.1 Heurística Original
 
-<!-- Tabelas e resultados do código - heurística original -->
+#### 2.2.1.1 GREEDY BEST-FIRST SEARCH
+
+| Passo | Nó expandido | h(n) | Fronteira |
+| --- | --- | --- | --- |
+| 1 | A | 10 | [C(7), B(8), D(9)] |
+| 2 | C | 7 | [H(4), G(6), B(8), D(9)] |
+| 3 | H | 4 | [O(1), N(4), G(6), B(8), D(9)] |
+| 4 | O | 1 | [T(0), N(4), G(6), B(8), D(9)] |
+| 5 | T | 0 | [N(4), G(6), B(8), D(9)] |
+
+* **Ordem de expansão:** A -> C -> H -> O -> T
+* **Caminho solução:** A -> C -> H -> O -> T
+* **Custo da solução:** 19
+* **Nós gerados:** 9 | Nós expandidos: 5
+
+#### 2.2.1.2 A* SEARCH
+
+| Passo | Nó | g(n) | h(n) | f(n) | Fronteira |
+| --- | --- | --- | --- | --- | --- |
+| 1 | A | 0 | 10 | 10 | [B(10), C(11), D(12)] |
+| 2 | B | 2 | 8 | 10 | [C(11), E(11), D(12), F(12)] |
+| 3 | C | 4 | 7 | 11 | [E(11), D(12), F(12), G(14), H(14)] |
+| 4 | E | 5 | 6 | 11 | [D(12), F(12), G(14), H(14), J(14)] |
+| 5 | D | 3 | 9 | 12 | [F(12), I(12), G(14), H(14), J(14)] |
+| 6 | F | 7 | 5 | 12 | [I(12), K(13), G(14), H(14), J(14), L(18)] |
+| 7 | I | 5 | 7 | 12 | [K(13), G(14), H(14), J(14), L(18), P(18)] |
+| 8 | K | 10 | 3 | 13 | [G(14), H(14), J(14), R(15), L(18), P(18)] |
+| 9 | G | 8 | 6 | 14 | [H(14), J(14), R(15), M(17), L(18), P(18)] |
+| 10 | H | 10 | 4 | 14 | [J(14), R(15), O(15), M(17), N(17), L(18), P(18)] |
+| 11 | J | 9 | 5 | 14 | [R(15), O(15), M(17), N(17), Q(17), L(18), P(18)] |
+| 12 | R | 13 | 2 | 15 | [O(15), M(17), N(17), Q(17), T(17), L(18), P(18)] |
+| 13 | O | 14 | 1 | 15 | [M(17), N(17), Q(17), T(17), L(18), P(18), T(19)] |
+| 14 | M | 14 | 3 | 17 | [N(17), Q(17), T(17), S(17), L(18), P(18), T(19)] |
+| 15 | N | 13 | 4 | 17 | [Q(17), T(17), S(17), L(18), P(18), T(19)] |
+| 16 | Q | 13 | 4 | 17 | [T(17), S(17), L(18), P(18), T(19)] |
+| 17 | T | 17 | 0 | 17 | [S(17), L(18), P(18), T(19)] |
+
+* **Ordem de expansão:** A -> B -> C -> E -> D -> F -> I -> K -> G -> H -> J -> R -> O -> M -> N -> Q -> T
+* **Caminho solução:** A -> B -> F -> K -> R -> T
+* **Custo da solução:** 17
+* **Nós gerados:** 21 | Nós expandidos: 17
 
 #### 2.2.2 Heurística Modificada
 
-<!-- Tabelas e resultados do código - heurística modificada -->
-<!-- Incluir nota sobre quais três nós foram alterados, valores antigos/novos e qual tornou h(n) inadmissível -->
+#### 2.2.2.1 GREEDY BEST-FIRST SEARCH
+
+| Passo | Nó expandido | h(n) | Fronteira |
+| --- | --- | --- | --- |
+| 1 | A | 10 | [C(2), D(9), B(20)] |
+| 2 | C | 2 | [G(6), D(9), H(15), B(20)] |
+| 3 | G | 6 | [M(3), D(9), H(15), B(20)] |
+| 4 | M | 3 | [S(1), D(9), H(15), B(20)] |
+| 5 | S | 1 | [T(0), D(9), H(15), B(20)] |
+| 6 | T | 0 | [D(9), H(15), B(20)] |
+
+* **Ordem de expansão:** A -> C -> G -> M -> S -> T
+* **Caminho solução:** A -> C -> G -> M -> S -> T
+* **Custo da solução:** 19
+* **Nós gerados:** 9 | Nós expandidos: 6
+
+#### 2.2.2.2 A* SEARCH
+
+| Passo | Nó | g(n) | h(n) | f(n) | Fronteira |
+| --- | --- | --- | --- | --- | --- |
+| 1 | A | 0 | 10 | 10 | [C(6), D(12), B(22)] |
+| 2 | C | 4 | 2 | 6 | [D(12), G(14), B(22), H(25)] |
+| 3 | D | 3 | 9 | 12 | [I(12), G(14), B(22), H(25)] |
+| 4 | I | 5 | 7 | 12 | [G(14), P(18), B(22), H(25)] |
+| 5 | G | 8 | 6 | 14 | [M(17), P(18), B(22), H(25)] |
+| 6 | M | 14 | 3 | 17 | [S(17), P(18), B(22), H(25)] |
+| 7 | S | 16 | 1 | 17 | [P(18), T(19), B(22), H(25)] |
+| 8 | P | 10 | 8 | 18 | [T(19), B(22), H(25)] |
+| 9 | T | 19 | 0 | 19 | [B(22), H(25)] |
+
+* **Ordem de expansão:** A -> C -> D -> I -> G -> M -> S -> P -> T
+* **Caminho solução:** A -> C -> G -> M -> S -> T
+* **Custo da solução:** 19
+* **Nós gerados:** 11 | Nós expandidos: 9
 
 ---
 
@@ -360,15 +713,70 @@ Paisagem topológica onde cada ponto é um estado possível e a altura é o núm
 
 #### 3.3.1 Hill-Climbing Simples
 
-<!-- Tabela passo a passo gerada pelo código -->
+| Passo | Estado | h(s) |
+| --- | --- | --- |
+| 0 | [1,1,1,1,1,1,1,1] | 28 |
+| 1 | [1,8,1,1,1,1,1,1] | 21 |
+| 2 | [2,8,1,1,1,1,1,1] | 15 |
+| 3 | [2,8,1,7,1,1,1,1] | 10 |
+| 4 | [2,8,1,7,1,6,1,1] | 6 |
+| 5 | [2,8,1,7,1,6,1,5] | 3 |
+| 6 | [2,8,1,7,4,6,1,5] | 1 |
+
+* **Estado final:** [2,8,1,7,4,6,1,5] com h(s) = 1
+* **Diagnóstico:** Parada em Máximo Local ou Platô (estagnação).
 
 #### 3.3.2 Random Restart Hill-Climbing (20 execuções)
 
-<!-- Tabela de execuções gerada pelo código -->
+| Exec. | Estado Inicial | Passos | h(s) final | Solução? |
+| --- | --- | --- | --- | --- |
+| 1 | [2,1,5,4,4,3,2,2] | 4 | 1 | Não |
+| 2 | [7,1,1,2,4,4,1,4] | 5 | 0 | Sim |
+| 3 | [7,4,8,5,1,3,7,6] | 2 | 2 | Não |
+| 4 | [5,3,4,6,2,2,7,2] | 2 | 1 | Não |
+| 5 | [6,6,5,1,8,2,7,2] | 4 | 0 | Sim |
+| 6 | [5,6,4,2,1,4,5,2] | 3 | 1 | Não |
+| 7 | [4,2,7,5,8,6,3,6] | 1 | 2 | Não |
+| 8 | [6,4,5,2,3,4,3,8] | 3 | 1 | Não |
+| 9 | [7,5,4,6,1,4,1,6] | 4 | 1 | Não |
+| 10 | [7,5,2,4,6,4,8,7] | 2 | 2 | Não |
+| 11 | [8,3,5,3,4,5,7,7] | 4 | 1 | Não |
+| 12 | [6,4,3,8,2,1,2,3] | 3 | 1 | Não |
+| 13 | [3,7,2,7,7,8,5,1] | 2 | 2 | Não |
+| 14 | [2,5,6,2,5,7,3,8] | 3 | 2 | Não |
+| 15 | [1,5,3,2,5,4,3,6] | 3 | 2 | Não |
+| 16 | [3,1,6,8,1,2,6,5] | 2 | 1 | Não |
+| 17 | [4,1,4,2,2,8,2,3] | 3 | 1 | Não |
+| 18 | [3,8,3,5,7,4,4,5] | 3 | 1 | Não |
+| 19 | [7,6,8,8,2,4,4,2] | 4 | 2 | Não |
+| 20 | [6,1,4,4,1,2,1,4] | 5 | 1 | Não |
+
+* **Total de soluções encontradas:** 2/20
+* **Taxa de sucesso:** 10.0%
 
 #### 3.3.3 Simulated Annealing
 
-<!-- Tabela resumida por passo e tabela de movimentos piores aceitos -->
+Resumo a cada 500 passos:
+
+| Passo | h(s) | T |
+| --- | --- | --- |
+| 0 | 28 | 10.0000 |
+| 500 | 1 | 0.0657 |
+| 688 | 1 | 0.0099 (Fim) |
+
+Primeiros 5 movimentos piores aceitos:
+
+| Passo | h(antes) | h(depois) | delta_E | T | P |
+| --- | --- | --- | --- | --- | --- |
+| 6 | 4 | 6 | 2 | 9.41 | 0.8086 |
+| 7 | 6 | 7 | 1 | 9.32 | 0.8983 |
+| 9 | 6 | 6 | 0 | 9.14 | 1.0000 |
+| 11 | 5 | 6 | 1 | 8.95 | 0.8943 |
+| 13 | 5 | 7 | 2 | 8.78 | 0.7962 |
+
+* **Estado final:** [6,2,5,1,7,4,8,3]
+* **h(s) final:** 1
+* **Diagnóstico:** Temperatura esgotada sem encontrar a solução ótima.
 
 ---
 
@@ -534,7 +942,48 @@ $D_i = \{A, B, C, D\}$ para todo $T_i \in X$.
 
 ### 4.3 Análise Manual de Forward Checking e Backjumping
 
-<!-- Saída do Prompt 4 da Q4 -->
+#### 4.3.1 BACKTRACKING SIMPLES
+
+* **Solução:** {'T1': 'A', 'T2': 'B', 'T3': 'C', 'T4': 'A', 'T5': 'B', 'T6': 'A'}
+* **Estados explorados:** 10
+* **Retrocessos:** 0
+* **Tempo:** 0.6154 ms
+
+#### 4.3.2 BACKTRACKING + MRV
+
+* **Solução:** {'T3': 'B', 'T2': 'A', 'T1': 'B', 'T4': 'A', 'T5': 'B', 'T6': 'A'}
+* **Estados explorados:** 9
+* **Retrocessos:** 0
+* **Tempo:** 0.1442 ms
+
+#### 4.3.3 BACKTRACKING + DEGREE
+
+* **Solução:** {'T2': 'A', 'T4': 'A', 'T5': 'B', 'T1': 'B', 'T3': 'B', 'T6': 'A'}
+* **Estados explorados:** 9
+* **Retrocessos:** 0
+* **Tempo:** 0.1023 ms
+
+#### 4.3.4 FORWARD CHECKING
+
+* **Solução:** {'T1': 'A', 'T2': 'B', 'T3': 'C', 'T4': 'A', 'T5': 'B', 'T6': 'A'}
+* **Estados explorados:** 6
+* **Retrocessos:** 0
+* **Tempo:** 0.0820 ms
+
+#### 4.3.5 BACKJUMPING
+
+* **Solução:** {'T1': 'A', 'T2': 'B', 'T3': 'C', 'T4': 'A', 'T5': 'B', 'T6': 'A'}
+* **Estados explorados:** 10
+* **Retrocessos:** 0
+* **Tempo:** 0.0539 ms
+
+| Algoritmo | Estados explorados | Retrocessos | Tempo (ms) |
+| --- | --- | --- | --- |
+| 1. BACKTRACKING SIMPLES | 10 | 0 | 0.6154 |
+| 2. BACKTRACKING + MRV | 9 | 0 | 0.1442 |
+| 3. BACKTRACKING + DEGREE | 9 | 0 | 0.1023 |
+| 4. FORWARD CHECKING | 6 | 0 | 0.0820 |
+| 5. BACKJUMPING | 10 | 0 | 0.0539 |
 
 ---
 
@@ -784,12 +1233,68 @@ O erro principal, conhecido como Efeito de Horizonte, ocorre quando a função h
 
 #### 5.4.1 Árvore Original
 
-<!-- Tabela comparativa gerada pelo código - árvore original -->
+#### 5.4.1.1 MINIMAX COMPLETO
+
+* **Valor na raiz:** 6
+* **Caminho ótimo:** A -> H -> J -> J2
+* **Nós explorados:** 22
+* **Decisão de A:** filho H
+
+#### 5.4.1.2 ALPHA-BETA
+
+* **Valor na raiz:** 6
+* **Caminho ótimo:** A -> H -> J -> J2
+* **Nós explorados:** 18
+* **Podas:** 2
+* No nó E, filhos ['E2'] podados (motivo: valor 6 >= beta 5)
+* No nó C, filhos ['G'] podados (motivo: valor 2 <= alpha 5)
+
+
+* **Decisão de A:** filho H
+
+#### 5.4.1.3 MINIMAX DEPTH-LIMITED (L=2)
+
+* **Valor na raiz:** 4
+* **Caminho ótimo:** A -> B -> D
+* **Nós explorados:** 10
+* **Decisão de A:** filho B
 
 #### 5.4.2 Árvore com Folhas Modificadas
 
-<!-- Tabela comparativa gerada pelo código - árvore modificada -->
-<!-- Incluir nota sobre quais 3 folhas foram alteradas e justificativa -->
+#### 5.4.2.1 MINIMAX COMPLETO
+
+* **Valor na raiz:** 8
+* **Caminho ótimo:** A -> B -> D -> D2
+* **Nós explorados:** 22
+* **Decisão de A:** filho B
+
+#### 5.4.2.2 ALPHA-BETA
+
+* **Valor na raiz:** 8
+* **Caminho ótimo:** A -> B -> D -> D2
+* **Nós explorados:** 16
+* **Podas:** 2
+* No nó C, filhos ['G'] podados (motivo: valor 2 <= alpha 8)
+* No nó H, filhos ['J'] podados (motivo: valor 4 <= alpha 8)
+
+
+* **Decisão de A:** filho B
+
+#### 5.4.2.3 MINIMAX DEPTH-LIMITED (L=2)
+
+* **Valor na raiz:** 4
+* **Caminho ótimo:** A -> B -> D
+* **Nós explorados:** 10
+* **Decisão de A:** filho B
+
+| Algoritmo | Árvore | Valor raiz | Nós explorados | Podas | Decisão A |
+| --- | --- | --- | --- | --- | --- |
+| Minimax Comp. | ÁRVORE ORIGINAL | 6 | 22 | - | H |
+| Alpha-Beta | ÁRVORE ORIGINAL | 6 | 18 | 2 | H |
+| Depth-Lim(2) | ÁRVORE ORIGINAL | 4 | 10 | - | B |
+| Minimax Comp. | ÁRVORE MODIFICADA | 8 | 22 | - | B |
+| Alpha-Beta | ÁRVORE MODIFICADA | 8 | 16 | 2 | B |
+| Depth-Lim(2) | ÁRVORE MODIFICADA | 4 | 10 | - | B |
 
 ---
 
@@ -1125,7 +1630,242 @@ $\frac{1}{2} + 3.0 \cdot \sqrt{\frac{2.3025}{2}} = 0.5 + 3.0 \cdot 1.0729 = 0.5 
 
 ### 6.4 Execução dos Algoritmos
 
-<!-- Tabela comparativa gerada pelo código (18 combinações) -->
+#### ROLLOUT: random | C: 0.1 | ITERAÇÕES: 10
+
+* **Jogada recomendada:** c4
+* **Tempo:** 2.97 ms
+
+| Ação | N | W | W/N | UCT final |
+| --- | --- | --- | --- | --- |
+| c1 | 1 | 0.5 | 0.500 | 0.652 |
+| c2 | 1 | 0.5 | 0.500 | 0.652 |
+| c3 | 1 | 0.5 | 0.500 | 0.652 |
+| c4 | 7 | 5.5 | 0.786 | 0.843 |
+
+#### ROLLOUT: random | C: 0.1 | ITERAÇÕES: 50
+
+* **Jogada recomendada:** c1
+* **Tempo:** 10.90 ms
+
+| Ação | N | W | W/N | UCT final |
+| --- | --- | --- | --- | --- |
+| c1 | 32 | 20.0 | 0.625 | 0.660 |
+| c2 | 2 | 1.0 | 0.500 | 0.640 |
+| c3 | 2 | 1.0 | 0.500 | 0.640 |
+| c4 | 14 | 8.5 | 0.607 | 0.660 |
+
+#### ROLLOUT: random | C: 0.1 | ITERAÇÕES: 200
+
+* **Jogada recomendada:** c3
+* **Tempo:** 44.11 ms
+
+| Ação | N | W | W/N | UCT final |
+| --- | --- | --- | --- | --- |
+| c1 | 1 | 0.0 | 0.000 | 0.230 |
+| c2 | 12 | 6.0 | 0.500 | 0.566 |
+| c3 | 123 | 70.0 | 0.569 | 0.590 |
+| c4 | 64 | 35.0 | 0.547 | 0.576 |
+
+#### ROLLOUT: random | C: 1.4 | ITERAÇÕES: 10
+
+* **Jogada recomendada:** c3
+* **Tempo:** 1.48 ms
+
+| Ação | N | W | W/N | UCT final |
+| --- | --- | --- | --- | --- |
+| c1 | 2 | 1.0 | 0.500 | 2.002 |
+| c2 | 2 | 1.0 | 0.500 | 2.002 |
+| c3 | 4 | 3.0 | 0.750 | 1.812 |
+| c4 | 2 | 1.0 | 0.500 | 2.002 |
+
+#### ROLLOUT: random | C: 1.4 | ITERAÇÕES: 50
+
+* **Jogada recomendada:** c2
+* **Tempo:** 9.23 ms
+
+| Ação | N | W | W/N | UCT final |
+| --- | --- | --- | --- | --- |
+| c1 | 14 | 10.0 | 0.714 | 1.454 |
+| c2 | 17 | 13.0 | 0.765 | 1.436 |
+| c3 | 6 | 2.0 | 0.333 | 1.464 |
+| c4 | 13 | 8.5 | 0.654 | 1.422 |
+
+#### ROLLOUT: random | C: 1.4 | ITERAÇÕES: 200
+
+* **Jogada recomendada:** c2
+* **Tempo:** 41.78 ms
+
+| Ação | N | W | W/N | UCT final |
+| --- | --- | --- | --- | --- |
+| c1 | 44 | 27.0 | 0.614 | 1.099 |
+| c2 | 80 | 59.5 | 0.744 | 1.104 |
+| c3 | 27 | 13.0 | 0.481 | 1.102 |
+| c4 | 49 | 31.0 | 0.633 | 1.093 |
+
+#### ROLLOUT: random | C: 3.0 | ITERAÇÕES: 10
+
+* **Jogada recomendada:** c1
+* **Tempo:** 3.70 ms
+
+| Ação | N | W | W/N | UCT final |
+| --- | --- | --- | --- | --- |
+| c1 | 3 | 1.5 | 0.500 | 3.128 |
+| c2 | 3 | 3.0 | 1.000 | 3.628 |
+| c3 | 2 | 1.0 | 0.500 | 3.719 |
+| c4 | 2 | 1.0 | 0.500 | 3.719 |
+
+#### ROLLOUT: random | C: 3.0 | ITERAÇÕES: 50
+
+* **Jogada recomendada:** c1
+* **Tempo:** 7.57 ms
+
+| Ação | N | W | W/N | UCT final |
+| --- | --- | --- | --- | --- |
+| c1 | 14 | 10.0 | 0.714 | 2.300 |
+| c2 | 11 | 6.0 | 0.545 | 2.335 |
+| c3 | 13 | 8.5 | 0.654 | 2.300 |
+| c4 | 12 | 7.5 | 0.625 | 2.338 |
+
+#### ROLLOUT: random | C: 3.0 | ITERAÇÕES: 200
+
+* **Jogada recomendada:** c2
+* **Tempo:** 44.82 ms
+
+| Ação | N | W | W/N | UCT final |
+| --- | --- | --- | --- | --- |
+| c1 | 48 | 27.5 | 0.573 | 1.570 |
+| c2 | 57 | 37.0 | 0.649 | 1.564 |
+| c3 | 45 | 24.0 | 0.533 | 1.563 |
+| c4 | 50 | 29.5 | 0.590 | 1.567 |
+
+#### ROLLOUT: greedy | C: 0.1 | ITERAÇÕES: 10
+
+* **Jogada recomendada:** c2
+* **Tempo:** 11.49 ms
+
+| Ação | N | W | W/N | UCT final |
+| --- | --- | --- | --- | --- |
+| c1 | 1 | 0.5 | 0.500 | 0.652 |
+| c2 | 7 | 4.5 | 0.643 | 0.700 |
+| c3 | 1 | 0.5 | 0.500 | 0.652 |
+| c4 | 1 | 0.5 | 0.500 | 0.652 |
+
+#### ROLLOUT: greedy | C: 0.1 | ITERAÇÕES: 50
+
+* **Jogada recomendada:** c2
+* **Tempo:** 47.11 ms
+
+| Ação | N | W | W/N | UCT final |
+| --- | --- | --- | --- | --- |
+| c1 | 14 | 9.0 | 0.643 | 0.696 |
+| c2 | 18 | 10.0 | 0.556 | 0.602 |
+| c3 | 15 | 8.5 | 0.567 | 0.618 |
+| c4 | 3 | 1.5 | 0.500 | 0.614 |
+
+#### ROLLOUT: greedy | C: 0.1 | ITERAÇÕES: 200
+
+* **Jogada recomendada:** c2
+* **Tempo:** 112.88 ms
+
+| Ação | N | W | W/N | UCT final |
+| --- | --- | --- | --- | --- |
+| c1 | 72 | 37.5 | 0.521 | 0.548 |
+| c2 | 99 | 52.0 | 0.525 | 0.548 |
+| c3 | 25 | 12.5 | 0.500 | 0.546 |
+| c4 | 4 | 1.5 | 0.375 | 0.490 |
+
+#### ROLLOUT: greedy | C: 1.4 | ITERAÇÕES: 10
+
+* **Jogada recomendada:** c1
+* **Tempo:** 7.95 ms
+
+| Ação | N | W | W/N | UCT final |
+| --- | --- | --- | --- | --- |
+| c1 | 3 | 2.0 | 0.667 | 1.893 |
+| c2 | 3 | 2.5 | 0.833 | 2.060 |
+| c3 | 2 | 1.0 | 0.500 | 2.002 |
+| c4 | 2 | 1.5 | 0.750 | 2.252 |
+
+#### ROLLOUT: greedy | C: 1.4 | ITERAÇÕES: 50
+
+* **Jogada recomendada:** c2
+* **Tempo:** 53.01 ms
+
+| Ação | N | W | W/N | UCT final |
+| --- | --- | --- | --- | --- |
+| c1 | 12 | 7.5 | 0.625 | 1.424 |
+| c2 | 15 | 10.5 | 0.700 | 1.415 |
+| c3 | 11 | 6.5 | 0.591 | 1.426 |
+| c4 | 12 | 7.5 | 0.625 | 1.424 |
+
+#### ROLLOUT: greedy | C: 1.4 | ITERAÇÕES: 200
+
+* **Jogada recomendada:** c2
+* **Tempo:** 130.42 ms
+
+| Ação | N | W | W/N | UCT final |
+| --- | --- | --- | --- | --- |
+| c1 | 56 | 34.5 | 0.616 | 1.047 |
+| c2 | 65 | 42.0 | 0.646 | 1.046 |
+| c3 | 39 | 20.5 | 0.526 | 1.042 |
+| c4 | 40 | 21.5 | 0.537 | 1.047 |
+
+#### ROLLOUT: greedy | C: 3.0 | ITERAÇÕES: 10
+
+* **Jogada recomendada:** c1
+* **Tempo:** 8.02 ms
+
+| Ação | N | W | W/N | UCT final |
+| --- | --- | --- | --- | --- |
+| c1 | 3 | 2.0 | 0.667 | 3.295 |
+| c2 | 3 | 2.5 | 0.833 | 3.462 |
+| c3 | 2 | 0.5 | 0.250 | 3.469 |
+| c4 | 2 | 1.0 | 0.500 | 3.719 |
+
+#### ROLLOUT: greedy | C: 3.0 | ITERAÇÕES: 50
+
+* **Jogada recomendada:** c2
+* **Tempo:** 52.46 ms
+
+| Ação | N | W | W/N | UCT final |
+| --- | --- | --- | --- | --- |
+| c1 | 12 | 7.0 | 0.583 | 2.296 |
+| c2 | 14 | 9.5 | 0.679 | 2.264 |
+| c3 | 11 | 5.0 | 0.455 | 2.244 |
+| c4 | 13 | 8.0 | 0.615 | 2.261 |
+
+#### ROLLOUT: greedy | C: 3.0 | ITERAÇÕES: 200
+
+* **Jogada recomendada:** c2
+* **Tempo:** 142.20 ms
+
+| Ação | N | W | W/N | UCT final |
+| --- | --- | --- | --- | --- |
+| c1 | 53 | 32.0 | 0.604 | 1.552 |
+| c2 | 63 | 43.0 | 0.683 | 1.553 |
+| c3 | 42 | 20.5 | 0.488 | 1.554 |
+| c4 | 42 | 20.5 | 0.488 | 1.554 |
+
+| Rollout | C | Iterações | Jogada | Tempo (ms) |
+| --- | --- | --- | --- | --- |
+| random | 0.1 | 10 | c4 | 2.97 |
+| random | 0.1 | 50 | c1 | 10.90 |
+| random | 0.1 | 200 | c3 | 44.11 |
+| random | 1.4 | 10 | c3 | 1.48 |
+| random | 1.4 | 50 | c2 | 9.23 |
+| random | 1.4 | 200 | c2 | 41.78 |
+| random | 3.0 | 10 | c1 | 3.70 |
+| random | 3.0 | 50 | c1 | 7.57 |
+| random | 3.0 | 200 | c2 | 44.82 |
+| greedy | 0.1 | 10 | c2 | 11.49 |
+| greedy | 0.1 | 50 | c2 | 47.11 |
+| greedy | 0.1 | 200 | c2 | 112.88 |
+| greedy | 1.4 | 10 | c1 | 7.95 |
+| greedy | 1.4 | 50 | c2 | 53.01 |
+| greedy | 1.4 | 200 | c2 | 130.42 |
+| greedy | 3.0 | 10 | c1 | 8.02 |
+| greedy | 3.0 | 50 | c2 | 52.46 |
+| greedy | 3.0 | 200 | c2 | 142.20 |
 
 ---
 

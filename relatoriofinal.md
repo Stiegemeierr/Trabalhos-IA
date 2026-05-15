@@ -633,19 +633,150 @@ Embora o Forward Checking tenha sido o algoritmo mais cirúrgico ao visitar apen
 
 ### 5.1 Conceitos Teóricos
 
-<!-- Saída do Prompt 1 da Q5 -->
+**a) Objetivo do algoritmo Minimax:**
+Determinar a jogada ótima para um jogador em jogos de soma zero com informação perfeita. Ele explora a árvore de busca completa antecipando todos os movimentos possíveis até o final do jogo.
+
+**b) Diferença entre nós MAX e MIN:**
+Os nós MAX representam o turno do jogador principal, que busca maximizar o ganho, escolhendo a jogada com o maior valor possível. Os nós MIN representam o turno do oponente, que busca minimizar o ganho do jogador MAX, escolhendo a jogada com o menor valor.
+
+**c) Conceito de utilidade:**
+É o valor numérico atribuído a um estado terminal (folha da árvore) que indica o resultado final do jogo. Valores positivos favorecem o jogador MAX (ex: +1 para vitória), valores negativos favorecem MIN (ex: -1 para derrota) e zero indica empate.
+
+**d) Propagação de valores na árvore:**
+Os valores de utilidade sobem da base da árvore (nós folha) até a raiz. Cada nó intermediário assume o valor do seu melhor sucessor de acordo com sua função (máximo para nós MAX, mínimo para nós MIN), definindo o valor esperado daquele estado.
+
+**e) Hipótese de adversário perfeito:**
+O algoritmo assume que o oponente sempre fará a jogada que mais prejudica o jogador MAX, sem cometer erros. Se o oponente jogar de forma subótima, o desempenho do jogador MAX será igual ou melhor do que o esperado.
+
+**f) Objetivo da poda Alpha-Beta:**
+Reduzir o número de nós avaliados pelo algoritmo Minimax, cortando ramos da árvore de busca que não podem influenciar a decisão final. Isso diminui o tempo de processamento sem alterar a escolha da jogada ótima.
 
 ---
 
 ### 5.2 Execução Manual: Minimax e Alpha-Beta
 
-<!-- Saída do Prompt 2 da Q5 -->
+### MINIMAX COMPLETO
+
+| Nó | Tipo | Filhos e valores | Valor Minimax |
+| --- | --- | --- | --- |
+| D | MAX | 3, 5 | 5 |
+| E | MAX | 6, 9 | 9 |
+| B | MIN | D=5, E=9 | 5 |
+| F | MAX | 1, 2 | 2 |
+| G | MAX | 0, -1 | 0 |
+| C | MIN | F=2, G=0 | 0 |
+| I | MAX | 7, 4 | 7 |
+| J | MAX | 5, 6 | 6 |
+| H | MIN | I=7, J=6 | 6 |
+| A | MAX | B=5, C=0, H=6 | 6 |
+
+**Decisão final de A:**
+A escolhe o filho **H**. Sendo um nó MAX, A escolhe a opção que maximiza o seu ganho final, sendo 6 o maior valor retornado entre as três ramificações possíveis (B=5, C=0, H=6).
+
+**Resumo da Busca:**
+
+* Caminho escolhido: **A → H** (com resposta ótima em J → 6)
+* Valor final obtido: **6**
+
+---
+
+### PODA ALPHA-BETA
+
+| Passo | Nó | α | β | Poda? | Motivo |
+| --- | --- | --- | --- | --- | --- |
+| 1 | A | -∞ | +∞ | não | Inicialização na raiz |
+| 2 | B | -∞ | +∞ | não | Herda os valores de A |
+| 3 | D | -∞ | +∞ | não | Herda os valores de B |
+| 4 | B | -∞ | 5 | não | Recebe 5 de D (MIN atualiza β = 5) |
+| 5 | E | -∞ | 5 | sim | E avalia a primeira folha 6 (MAX atualiza α = 6). Como α=6 >= β=5, poda o ramo restante |
+| 6 | A | 5 | +∞ | não | Recebe 5 de B (MAX atualiza α = 5) |
+| 7 | C | 5 | +∞ | não | Herda os valores de A |
+| 8 | F | 5 | +∞ | não | Herda os valores de C |
+| 9 | C | 5 | 2 | sim | Recebe 2 de F (MIN atualiza β = 2). Como β=2 <= α=5, poda o ramo restante |
+| 10 | H | 5 | +∞ | não | Herda os valores atualizados de A |
+| 11 | I | 5 | +∞ | não | Herda os valores de H |
+| 12 | H | 5 | 7 | não | Recebe 7 de I (MIN atualiza β = 7) |
+| 13 | J | 5 | 7 | não | Herda os valores de H |
+| 14 | H | 5 | 6 | não | Recebe 6 de J (MIN atualiza β de 7 para 6) |
+| 15 | A | 6 | +∞ | não | Recebe 6 de H (MAX atualiza α de 5 para 6) |
+
+**Estatísticas Finais da Poda:**
+
+* **Total de podas ocorridas:** 2
+* **Nós/folhas NÃO explorados:** Folha 9 (filha de E), Nó G (filho de C) e suas respectivas folhas (0 e -1).
+* **Quantidade de nós não explorados:** 4 (1 nó interno + 3 folhas).
 
 ---
 
 ### 5.3 Reordenação e Minimax com Profundidade Limitada
 
-<!-- Saída do Prompt 3 da Q5 -->
+**a) Nova ordem escolhida e justificativa**
+A ordem ideal no Alpha-Beta é explorar primeiro os lances mais promissores (maiores valores para MAX, menores para MIN).
+
+* Para o nó A (MAX), o melhor filho é H (valor 6), seguido de B (5) e C (0). Nova ordem de A: **H, B, C**.
+* Para o nó H (MIN), o melhor filho é J (valor 6) frente a I (7). Nova ordem de H: **J, I**.
+* Para o nó B (MIN), o melhor filho é D (valor 5) frente a E (9). Nova ordem de B: **D, E**.
+* Para o nó C (MIN), o melhor filho é G (valor 0) frente a F (2). Nova ordem de C: **G, F**.
+
+**b) Tabela Alpha-Beta com a nova ordem:**
+
+| Passo | Nó | α | β | Poda? | Motivo |
+| --- | --- | --- | --- | --- | --- |
+| 1 | A | -∞ | +∞ | não | Inicialização |
+| 2 | H | -∞ | +∞ | não | Herda de A |
+| 3 | J | -∞ | +∞ | não | Herda de H |
+| 4 | H | -∞ | 6 | não | J avalia 5 e 6, retorna 6. MIN atualiza β=6 |
+| 5 | I | -∞ | 6 | sim | I avalia a primeira folha (7). MAX atualiza α=7. Como α=7 >= β=6, poda a folha 4 |
+| 6 | A | 6 | +∞ | não | H retorna 6. MAX atualiza α=6 |
+| 7 | B | 6 | +∞ | não | Herda de A |
+| 8 | D | 6 | +∞ | não | Herda de B |
+| 9 | B | 6 | 5 | sim | D avalia 3 e 5, retorna 5. MIN atualiza β=5. Como β=5 <= α=6, poda o nó inteiro E |
+| 10 | C | 6 | +∞ | não | Herda de A |
+| 11 | G | 6 | +∞ | não | Herda de C |
+| 12 | C | 6 | 0 | sim | G avalia 0 e -1, retorna 0. MIN atualiza β=0. Como β=0 <= α=6, poda o nó inteiro F |
+
+**c) Total de podas com a ordem original:** 2
+**d) Total de podas com a nova ordem:** 3 (com volume de poda muito maior, cortando ramos inteiros precocemente).
+
+**e) Por que a nova ordem melhora a eficiência:**
+Ao descobrir rapidamente o melhor lance global (o valor 6 de H), o nó MAX (A) eleva seu "piso" de garantia (α) logo no início. Quando os demais nós (B e C) começam a ser explorados, qualquer evidência inicial de que o oponente (MIN) conseguirá forçar um valor inferior a 6 (como o 5 retornado por D ou o 0 retornado por G) é suficiente para abortar a busca naquele ramo instantaneamente, economizando o cálculo de todos os irmãos restantes.
+
+**f) Relação geral entre ordenação e desempenho:**
+O Alpha-Beta com ordenação aleatória poda pouco e tem complexidade $O(b^d)$. Com a ordenação perfeita (melhores lances primeiro), o algoritmo atinge sua máxima eficiência temporal, caindo para $O(b^{d/2})$, permitindo buscar no dobro da profundidade com o mesmo tempo de processamento.
+
+---
+
+### MINIMAX COM PROFUNDIDADE LIMITADA (limite = 2)
+
+**a) Tabela com valores heurísticos usados e propagados**
+
+* **Profundidade 2 (Folhas da busca):** Valores fornecidos pela função heurística $h(n)$.
+* $h(D) = 4$
+* $h(E) = 7$
+* $h(F) = 2$
+* $h(G) = 5$
+* $h(I) = 6$
+* $h(J) = 1$
+
+
+
+| Nó | Tipo (Profundidade) | Filhos e valores (Heurística) | Valor Minimax |
+| --- | --- | --- | --- |
+| B | MIN (1) | D=4, E=7 | 4 |
+| C | MIN (1) | F=2, G=5 | 2 |
+| H | MIN (1) | I=6, J=1 | 1 |
+| A | MAX (0) | B=4, C=2, H=1 | 4 |
+
+**b) Decisão tomada por A com Minimax limitado:**
+A escolhe o filho **B**.
+
+**c) Comparação com a decisão do Minimax completo:**
+
+* **A decisão mudou?** Sim. Mudou de H para B.
+* **O valor obtido é maior, menor ou igual?** O valor real obtido jogando B seria 5 (visto na Parte 1), o que é menor que o valor ótimo 6 (que seria obtido jogando H). O valor estimado (4) também é diferente e pior que o real ótimo.
+
+**d) Discussão: erros da heurística**
+O erro principal, conhecido como Efeito de Horizonte, ocorre quando a função heurística não consegue prever uma mudança drástica de vantagem (como uma captura de peça) que acontece logo após o limite da profundidade de busca. Neste exemplo, a heurística estimou mal o nó H (dando peso 1 a J, quando na realidade J levaria aos valores reais 5 e 6). Ao estagnar a busca artificialmente, o algoritmo confia cegamente em estimativas estáticas imprecisas, descartando caminhos que a longo prazo seriam vitoriosos e preferindo caminhos que parecem bons a curto prazo, mas são subótimos.
 
 ---
 
@@ -664,7 +795,72 @@ Embora o Forward Checking tenha sido o algoritmo mais cirúrgico ao visitar apen
 
 ### 5.5 Análise do Experimento e Comparação Final
 
-<!-- Saída do Prompt 5 da Q5 -->
+
+**a) A decisão final de A mudou com as folhas modificadas:**  
+Sim.  
+- Minimax Completo: de H para B.  
+- Alpha-Beta: de H para B.  
+- Depth-Limited já escolhia B e permaneceu igual.
+
+**b) O valor calculado na raiz mudou? Em quanto:**  
+Sim.  
+- Minimax Completo: de 6 para 8 (+2).  
+- Alpha-Beta: de 6 para 8 (+2).  
+- Depth-Limited permaneceu em 4.
+
+**c) O Alpha-Beta manteve a mesma decisão que o Minimax:**  
+Sim. Em ambas as árvores, Alpha-Beta tomou exatamente a mesma decisão do Minimax Completo.  
+- Árvore original: ambos escolheram H.  
+- Árvore modificada: ambos escolheram B.
+
+**d) Análise da sensibilidade:**  
+As folhas mais impactantes foram as ligadas ao ramo B -> D -> D2, pois a alteração elevou o valor da raiz de 6 para 8 e mudou a decisão final de H para B.  
+Folhas mais profundas e em ramos podados tiveram menor impacto, porque algumas nem chegaram a ser exploradas pelo Alpha-Beta.
+
+---
+
+# COMPARAÇÃO MINIMAX vs ALPHA-BETA
+
+| Critério | Minimax | Alpha-Beta |
+|---|---|---|
+| **a) Número de nós explorados** | 22 nós na árvore original e modificada | 18 nós na original e 16 na modificada |
+| **b) Quantidade de podas** | Não realiza podas | 2 podas em ambas as árvores |
+| **c) Custo computacional** | Alto | Médio |
+| **d) Consumo de memória** | Alto | Médio |
+| **e) Impacto da ordenação dos movimentos** | Baixo | Alto |
+| **f) Qualidade das decisões** | Ótima | Ótima |
+
+### Justificativas
+
+**a) Número de nós explorados:**  
+O Alpha-Beta explorou menos nós em ambos os casos.  
+- Original: 18 contra 22.  
+- Modificada: 16 contra 22.
+
+**b) Quantidade de podas:**  
+O Minimax avalia toda a árvore e não faz podas.  
+O Alpha-Beta realizou 2 podas nas duas execuções.
+
+**c) Custo computacional:**  
+O Minimax possui maior custo por visitar todos os nós.  
+O Alpha-Beta reduz processamento ao eliminar ramos desnecessários.
+
+**d) Consumo de memória:**  
+O Minimax mantém mais estados ativos devido à exploração completa.  
+O Alpha-Beta reduz armazenamento ao interromper partes da busca.
+
+**e) Impacto da ordenação dos movimentos:**  
+No Minimax, a ordem dos filhos não altera o número de nós visitados.  
+No Alpha-Beta, uma boa ordenação aumenta as podas e reduz explorações.
+
+**f) Qualidade das decisões:**  
+Os dois algoritmos encontraram exatamente a mesma decisão final nas duas árvores.  
+Alpha-Beta preservou a optimalidade do Minimax.
+
+### Cenário em que Alpha-Beta perde vantagem
+
+O Alpha-Beta perde vantagem quando a ordenação dos movimentos é ruim e poucas podas acontecem.  
+Nesse caso, ele pode acabar explorando quase a mesma quantidade de nós que o Minimax.
 
 ---
 ---
@@ -673,19 +869,257 @@ Embora o Forward Checking tenha sido o algoritmo mais cirúrgico ao visitar apen
 
 ### 6.1 Conceitos Teóricos
 
-<!-- Saída do Prompt 1 da Q6 -->
+**a) Seleção:**
+O algoritmo desce pela árvore de jogo partindo da raiz, escolhendo a cada passo o nó filho que apresenta o maior valor segundo uma fórmula de balanceamento (como a UCT). Este processo continua recursivamente até alcançar um nó folha que ainda não foi totalmente expandido.
+
+**b) Expansão:**
+Ao chegar a um nó folha não terminal, caso esse nó tenha sido visitado pelo menos uma vez, ele é expandido com a adição de um (ou mais) de seus filhos à árvore. No Connect-4, isso significaria criar um novo nó representando a jogada em uma coluna válida (ex: jogar na $c_1$).
+
+**c) Simulação (rollout):**
+A partir do nó recém-expandido, o MCTS realiza jogadas aleatórias (ou baseadas em heurísticas simples) para ambos os jogadores até que o jogo atinja um estado terminal (vitória, derrota ou empate). Essa simulação rápida serve para estimar o valor real daquele estado sem precisar construir a árvore inteira.
+
+**d) Retropropagação:**
+O resultado final obtido na simulação (ex: +1 para vitória, -1 para derrota) é propagado de volta, subindo do nó expandido até a raiz da árvore. Durante a subida, as estatísticas de todos os nós ancestrais que fazem parte desse caminho são atualizadas com o novo resultado.
+
+**e) Papel do número de visitas N(s):**
+Representa a quantidade de vezes que o estado $s$ (ou nó) foi selecionado para participar de uma simulação. O aumento de $N(s)$ indica que o algoritmo está acumulando mais informações sobre aquele nó, aumentando a confiabilidade estatística de sua avaliação.
+
+**f) Papel do número de vitórias W(s):**
+É o saldo acumulado das recompensas retropropagadas por todas as simulações que passaram pelo estado $s$. A divisão $W(s) / N(s)$ define a taxa de vitória empírica (ou utilidade esperada) daquele nó, servindo de base para o MCTS avaliar se a jogada é promissora (explotação).
+
+**g) Diferença entre exploração e explotação:**
+A explotação prefere nós com alta taxa de vitória ($W/N$), focando nas jogadas que já provaram ser boas. A exploração prefere nós com poucas visitas ($N(s)$ baixo), incentivando a descoberta de caminhos desconhecidos para evitar a estagnação em máximos locais. Na fórmula UCT, o parâmetro constante $C$ (peso de exploração) controla esse balanço: valores altos de $C$ forçam o algoritmo a explorar ramos ignorados, enquanto valores próximos a zero forçam a focar quase exclusivamente no ramo de maior taxa de vitória atual.
 
 ---
 
 ### 6.2 Execução Manual: 10 Iterações com C = 1.4
 
-<!-- Saída do Prompt 2 da Q6 -->
+
+**Iteração 1:**
+
+* Seleção: raiz
+* Nó expandido: c1
+* Resultado do rollout: V (valor: 1)
+* Atualizações: nó raiz→c1 (N=1, W=1), raiz (N=1, W=1)
+* Árvore após iteração:
+| Ação | N | W | UCT (se N>0) |
+| --- | --- | --- | --- |
+| c1 | 1 | 1 | 1.000 |
+| c2 | 0 | 0 | ∞ |
+| c3 | 0 | 0 | ∞ |
+| c4 | 0 | 0 | ∞ |
+
+
+
+**Iteração 2:**
+
+* Seleção: raiz
+* Nó expandido: c2
+* Resultado do rollout: A (valor: 0)
+* Atualizações: nó raiz→c2 (N=1, W=0), raiz (N=2, W=1)
+* Árvore após iteração:
+| Ação | N | W | UCT (se N>0) |
+| --- | --- | --- | --- |
+| c1 | 1 | 1 | 2.166 |
+| c2 | 1 | 0 | 1.166 |
+| c3 | 0 | 0 | ∞ |
+| c4 | 0 | 0 | ∞ |
+
+
+
+**Iteração 3:**
+
+* Seleção: raiz
+* Nó expandido: c3
+* Resultado do rollout: V (valor: 1)
+* Atualizações: nó raiz→c3 (N=1, W=1), raiz (N=3, W=2)
+* Árvore após iteração:
+| Ação | N | W | UCT (se N>0) |
+| --- | --- | --- | --- |
+| c1 | 1 | 1 | 2.467 |
+| c2 | 1 | 0 | 1.467 |
+| c3 | 1 | 1 | 2.467 |
+| c4 | 0 | 0 | ∞ |
+
+
+
+**Iteração 4:**
+
+* Seleção: raiz
+* Nó expandido: c4
+* Resultado do rollout: A (valor: 0)
+* Atualizações: nó raiz→c4 (N=1, W=0), raiz (N=4, W=2)
+* Árvore após iteração:
+| Ação | N | W | UCT (se N>0) |
+| --- | --- | --- | --- |
+| c1 | 1 | 1 | 2.648 |
+| c2 | 1 | 0 | 1.648 |
+| c3 | 1 | 1 | 2.648 |
+| c4 | 1 | 0 | 1.648 |
+
+
+
+**Iteração 5:**
+
+* Seleção: raiz → c1 (desempate pelo menor índice entre c1 e c3)
+* Nó expandido: c1 (primeiro filho não visitado de c1)
+* Resultado do rollout: V (valor: 1)
+* Atualizações: nó raiz→c1→c1 (N=1, W=1), nó raiz→c1 (N=2, W=2), raiz (N=5, W=3)
+* Árvore após iteração:
+| Ação | N | W | UCT (se N>0) |
+| --- | --- | --- | --- |
+| c1 | 2 | 2 | 2.256 |
+| c2 | 1 | 0 | 1.776 |
+| c3 | 1 | 1 | 2.776 |
+| c4 | 1 | 0 | 1.776 |
+
+
+
+**Iteração 6:**
+
+* Seleção: raiz → c3
+* Nó expandido: c1 (primeiro filho não visitado de c3)
+* Resultado do rollout: A (valor: 0)
+* Atualizações: nó raiz→c3→c1 (N=1, W=0), nó raiz→c3 (N=2, W=1), raiz (N=6, W=3)
+* Árvore após iteração:
+| Ação | N | W | UCT (se N>0) |
+| --- | --- | --- | --- |
+| c1 | 2 | 2 | 2.325 |
+| c2 | 1 | 0 | 1.874 |
+| c3 | 2 | 1 | 1.825 |
+| c4 | 1 | 0 | 1.874 |
+
+
+
+**Iteração 7:**
+
+* Seleção: raiz → c1
+* Nó expandido: c2 (próximo filho não visitado de c1)
+* Resultado do rollout: V (valor: 1)
+* Atualizações: nó raiz→c1→c2 (N=1, W=1), nó raiz→c1 (N=3, W=3), raiz (N=7, W=4)
+* Árvore após iteração:
+| Ação | N | W | UCT (se N>0) |
+| --- | --- | --- | --- |
+| c1 | 3 | 3 | 2.128 |
+| c2 | 1 | 0 | 1.953 |
+| c3 | 2 | 1 | 1.881 |
+| c4 | 1 | 0 | 1.953 |
+
+
+
+**Iteração 8:**
+
+* Seleção: raiz → c1
+* Nó expandido: c3 (próximo filho não visitado de c1)
+* Resultado do rollout: A (valor: 0)
+* Atualizações: nó raiz→c1→c3 (N=1, W=0), nó raiz→c1 (N=4, W=3), raiz (N=8, W=4)
+* Árvore após iteração:
+| Ação | N | W | UCT (se N>0) |
+| --- | --- | --- | --- |
+| c1 | 4 | 3 | 1.759 |
+| c2 | 1 | 0 | 2.019 |
+| c3 | 2 | 1 | 1.928 |
+| c4 | 1 | 0 | 2.019 |
+
+
+
+**Iteração 9:**
+
+* Seleção: raiz → c2 (desempate pelo menor índice entre c2 e c4)
+* Nó expandido: c1 (primeiro filho não visitado de c2)
+* Resultado do rollout: A (valor: 0)
+* Atualizações: nó raiz→c2→c1 (N=1, W=0), nó raiz→c2 (N=2, W=0), raiz (N=9, W=4)
+* Árvore após iteração:
+| Ação | N | W | UCT (se N>0) |
+| --- | --- | --- | --- |
+| c1 | 4 | 3 | 1.788 |
+| c2 | 2 | 0 | 1.467 |
+| c3 | 2 | 1 | 1.967 |
+| c4 | 1 | 0 | 2.075 |
+
+
+
+**Iteração 10:**
+
+* Seleção: raiz → c4
+* Nó expandido: c1 (primeiro filho não visitado de c4)
+* Resultado do rollout: V (valor: 1)
+* Atualizações: nó raiz→c4→c1 (N=1, W=1), nó raiz→c4 (N=2, W=1), raiz (N=10, W=5)
+* Árvore após iteração:
+| Ação | N | W | UCT (se N>0) |
+| --- | --- | --- | --- |
+| c1 | 4 | 3 | 1.812 |
+| c2 | 2 | 0 | 1.502 |
+| c3 | 2 | 1 | 2.002 |
+| c4 | 2 | 1 | 2.002 |
+
+
+
+---
+
+### Tabela Final
+
+| Ação | N | W | UCT Final |
+| --- | --- | --- | --- |
+| c1 | 4 | 3 | 1.812 |
+| c2 | 2 | 0 | 1.502 |
+| c3 | 2 | 1 | 2.002 |
+| c4 | 2 | 1 | 2.002 |
+
+* **Jogada recomendada:** c1.
+* **Justificativa:** No MCTS, a jogada escolhida ao final do tempo/iterações limite é a raiz que possui a contagem de visitas ($N$) mais alta, pois representa o caminho mais robusto, exaustivamente testado e que se manteve promissor o suficiente para ser selecionado repetidas vezes pelo balanceamento da fórmula UCT.
 
 ---
 
 ### 6.3 Análise do Parâmetro C (0.1, 1.4 e 3.0)
 
-<!-- Saída do Prompt 3 da Q6 -->
+
+**Para C = 0.1 (baixa exploração):**
+a) O termo de exploração torna-se quase insignificante perto do termo de explotação (a taxa de vitória $W/N$), fazendo com que o algoritmo confie cegamente nos resultados das primeiras simulações.
+b) As ações que obtiveram vitórias acidentais ou precoces nas primeiras iterações (neste caso, a ação c1) dominariam completamente as visitas, pois qualquer falha nos nós irmãos (como os zeros em c2) os faria ser punidos e ignorados pelo resto da busca.
+c) A distribuição de visitas seria muito **menos** uniforme do que com C=1.4, concentrando quase todas as visitas em 1 ou 2 filhos.
+d) O risco de não encontrar a jogada ótima é altíssimo (convergência prematura), pois o algoritmo estagna em um máximo local e não permite que outros ramos provem seu valor real com uma amostragem decente.
+
+**Para C = 3.0 (alta exploração):**
+a) O termo de exploração domina o termo de explotação, forçando o algoritmo a escolher repetidamente os ramos que foram menos visitados, ignorando temporariamente quem tem a maior taxa de vitórias.
+b) Todas as ações tenderiam a ser visitadas um número de vezes muito parecido, pois assim que uma ação ganha uma ou duas visitas extras, seu termo $N(j)$ no denominador penaliza fortemente seu UCT, forçando a seleção das outras.
+c) A distribuição de visitas seria muito **mais** uniforme do que com C=1.4, aproximando-se de uma busca em largura (Breadth-First Search).
+d) O risco de desperdiçar simulações em ações ruins é extremo, pois o algoritmo passará muito tempo testando ramos comprovadamente desastrosos apenas para satisfazer a curiosidade estatística, reduzindo a profundidade alcançada no ramo ótimo.
+
+---
+
+### CÁLCULOS UCT (Estado final, N_pai = 10)
+
+**Fórmula base:** $UCT(j) = \frac{W(j)}{N(j)} + C \cdot \sqrt{\frac{\ln(10)}{N(j)}}$
+Dado: $\ln(10) \approx 2.3025$
+
+#### Cálculos para C = 0.1
+
+* **c1:** $N=4, W=3$
+$\frac{3}{4} + 0.1 \cdot \sqrt{\frac{2.3025}{4}} = 0.75 + 0.1 \cdot \sqrt{0.5756} = 0.75 + 0.1 \cdot 0.7587 = 0.75 + 0.0759 = \mathbf{0.8259}$
+* **c2:** $N=2, W=0$
+$\frac{0}{2} + 0.1 \cdot \sqrt{\frac{2.3025}{2}} = 0 + 0.1 \cdot \sqrt{1.1512} = 0 + 0.1 \cdot 1.0729 = 0 + 0.1073 = \mathbf{0.1073}$
+* **c3 e c4:** $N=2, W=1$
+$\frac{1}{2} + 0.1 \cdot \sqrt{\frac{2.3025}{2}} = 0.5 + 0.1 \cdot 1.0729 = 0.5 + 0.1073 = \mathbf{0.6073}$
+
+#### Cálculos para C = 3.0
+
+* **c1:** $N=4, W=3$
+$\frac{3}{4} + 3.0 \cdot \sqrt{\frac{2.3025}{4}} = 0.75 + 3.0 \cdot 0.7587 = 0.75 + 2.2761 = \mathbf{3.0261}$
+* **c2:** $N=2, W=0$
+$\frac{0}{2} + 3.0 \cdot \sqrt{\frac{2.3025}{2}} = 0 + 3.0 \cdot 1.0729 = \mathbf{3.2187}$
+* **c3 e c4:** $N=2, W=1$
+$\frac{1}{2} + 3.0 \cdot \sqrt{\frac{2.3025}{2}} = 0.5 + 3.0 \cdot 1.0729 = 0.5 + 3.2187 = \mathbf{3.7187}$
+
+---
+
+### TABELA COMPARATIVA
+
+| C | Ação mais visitada esperada | Diversidade | Estabilidade | Qualidade |
+| --- | --- | --- | --- | --- |
+| 0.1 | c1 (viciada no primeiro sucesso) | Baixa | Baixa (Altamente dependente da sorte inicial) | Baixa (Risco de máximo local) |
+| 1.4 | c1 (equilibrada) | Média | Alta (Convergência garantida no tempo) | Alta (Busca seletiva e confiável) |
+| 3.0 | Múltiplas (busca uniforme) | Alta | Média (Não aprofunda onde deve) | Média (Desperdício em ações nulas) |
 
 ---
 
@@ -697,6 +1131,37 @@ Embora o Forward Checking tenha sido o algoritmo mais cirúrgico ao visitar apen
 
 ### 6.5 Comparação Final
 
-<!-- Saída do Prompt 5 da Q6 -->
+
+**a) Qualidade das decisões:** A jogada recomendada difere drasticamente em baixas iterações. O rollout semi-guloso encontra a jogada ótima (`c2`) muito mais cedo e a mantém, enquanto o aleatório é errático nas primeiras fases (sugerindo `c4`, `c1` e `c3`) e só converge para a resposta correta (`c2`) a partir de 200 iterações (com C=1.4 e C=3.0).
+
+**b) Velocidade de convergência:** O rollout semi-guloso estabiliza a jogada recomendada (`c2`) já com 50 iterações (para C=1.4 e C=3.0) e até mesmo com 10 iterações (para C=0.1). O rollout aleatório requer o teto máximo de 200 iterações para finalmente estabilizar em `c2`.
+
+**c) Número de simulações necessárias:** O semi-guloso precisa de apenas cerca de 50 simulações para obter um W/N confiável que indique a vitória clara, custando cerca de 53 ms por ser mais pesado computacionalmente. O aleatório compensa sua "burrice" tática com volume bruto, exigindo 200 simulações para superar o ruído (custando ~41 a 44 ms), provando que inteligência embutida no rollout poupa exploração na árvore.
+
+### IMPACTO DO VALOR DE C
+
+**a) Distribuição de visitas:** Com C=0.1, a distribuição é extremamente concentrada e viciada (ex: Aleatório/200 tem 123 visitas em `c3` e apenas 1 em `c1`). Com C=3.0, a distribuição é forçadamente uniforme e dispersa (ex: Aleatório/200 distribui as visitas quase igualmente: 48, 57, 45, 50). O valor C=1.4 apresenta a melhor proporção de direcionamento seletivo focado em `c2` (80 visitas contra 27 a 49 das demais).
+
+**b) Estabilidade da jogada:** C=0.1 gera instabilidade severa no rollout aleatório, trocando de recomendação a cada salto (`c4` $\to$ `c1` $\to$ `c3`). C=1.4 e C=3.0 mostram forte estabilidade de longo prazo, ambos corrigindo erros iniciais nas 10 iterações para convergir solidamente em `c2` nas 200 iterações.
+
+**c) Melhor jogada com poucas iterações:** O valor C=0.1 acoplado ao rollout semi-guloso foi o único a "cravar" a jogada ótima (`c2`) com apenas 10 iterações. Ao ignorar a exploração prematuramente, ele capitalizou rapidamente em cima do determinismo forte fornecido pela heurística do rollout guloso.
+
+### COMPARAÇÃO GERAL
+
+| Eixo de Análise | Variante 1 | Variante 2 | Variante 3 |
+| --- | --- | --- | --- |
+| **a) Rollout** | Aleatório | Semi-guloso | - |
+| **b) Valor de C** | C = 0.1 | C = 1.4 | C = 3.0 |
+| **c) Iterações** | 10 | 50 | 200 |
+| **d) Estabilidade** | Baixa | Média | Alta |
+
+**Justificativas:**
+
+* **a) Rollout:** O aleatório é quase 3x mais rápido processualmente (~41ms vs ~130ms em 200 iters), mas o semi-guloso compensa ao introduzir conhecimento do domínio, convergindo para a decisão correta com ¼ das simulações.
+* **b) Valores de C:** C=0.1 provoca convergência prematura em máximos locais errados se a heurística for cega, enquanto C=3.0 atrasa o refinamento estatístico ao explorar opções inúteis; C=1.4 entrega o equilíbrio matemático ideal de convergência progressiva.
+* **c) Número de Iterações:** 10 iterações sofrem de ruído estatístico agudo e geram recomendações quase aleatórias, 50 iterações iniciam a estabilização real do MCTS, e 200 iterações garantem a prova matemática da decisão.
+* **d) Estabilidade das decisões:** A pior estabilidade reside na combinação de baixas iterações com parâmetros extremos (C=0.1 e random), enquanto a estabilidade plena emerge do uso do fator heurístico (semi-guloso) pareado com a calibragem clássica de C=1.4 em alto volume.
+
+A configuração recomendada para este problema é o **Rollout Semi-guloso com C=1.4 e 50 iterações**. Esta combinação atinge o ponto de eficiência ideal, garantindo a identificação cravada e estável da jogada ótima (`c2`) com um custo computacional extremamente viável (~53 ms), dispensando o processamento desnecessário de 200 iterações. O uso de C=1.4 previne tanto a cegueira gananciosa de C=0.1 quanto a dispersão difusa de C=3.0, extraindo o máximo do conhecimento tático embutido no rollout guloso.
 
 ---
